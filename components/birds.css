@@ -1,0 +1,38 @@
+/* flying birds behind the hero text */
+.hero > .wrap {
+  position: relative;
+  z-index: 1;
+}
+.birds {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.bird {
+  position: absolute;
+  left: 0;
+  top: var(--y);
+  width: calc(30px * var(--s));
+  height: auto;
+  color: var(--ink);
+  opacity: 0.85;
+  animation: fly var(--t) linear var(--d) infinite;
+}
+@keyframes fly {
+  from {
+    transform: translate(-12vw, 0);
+  }
+  50% {
+    transform: translate(50vw, -16px);
+  }
+  to {
+    transform: translate(112vw, -36px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .birds {
+    display: none;
+  }
+}
