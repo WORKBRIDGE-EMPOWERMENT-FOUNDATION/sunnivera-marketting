@@ -1,14 +1,17 @@
 'use server'
-import { cookies, headers } from 'next/headers'
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { makeToken, verifyToken, safeEqual } from '@/lib/auth'
+import { isAdminEmail } from '@/lib/admin-auth'
+import { createSupabaseServerClient } from '@/lib/supabase/server'
 import { savePost, deletePost, slugify } from '@/lib/posts'
 
 const tries = new Map<string, number[]>()
 
 async function requireAdmin() {
-  if (!(await verifyToken((await cookies()).get('admin')?.value))) redirect('/admin/login')
+  const supabase = await createSupabaseServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user || !isAdminEmail(user.email)) redirect('/admin/login')
 }
 
 function refresh() {
@@ -24,17 +27,19 @@ export async function login(fd: FormData) {
   if (recent.length >= 5) redirect('/admin/login?error=rate')
   tries.set(ip, [...recent, now])
 
-  const pw = String(fd.get('password') ?? '')
-  const real = process.env.ADMIN_PASSWORD
-  if (!real || !safeEqual(pw, real)) redirect('/admin/login?error=1')
-  ;(await cookies()).set('admin', await makeToken(), {
-    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 7,
-  })
+  const email = String(fd.get('email') ?? '').trim().toLowerCase()
+  const password = String(fd.get('password') ?? '')
+  if (!email || !password || !isAdminEmail(email)) redirect('/admin/login?error=1')
+
+  const supabase = await createSupabaseServerClient()
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  if (error) redirect('/admin/login?error=1')
   redirect('/admin')
 }
 
 export async function logout() {
-  ;(await cookies()).delete('admin')
+  const supabase = await createSupabaseServerClient()
+  await supabase.auth.signOut()
   redirect('/admin/login')
 }
 
