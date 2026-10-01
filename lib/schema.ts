@@ -5,6 +5,7 @@ export const posts = pgTable('posts', {
   slug: varchar('slug', { length: 160 }).notNull().unique(),
   title: text('title').notNull(),
   excerpt: text('excerpt').notNull().default(''),
+  featuredImage: text('featured_image').notNull().default(''),
   body: text('body').notNull().default(''), // Markdown
   tags: text('tags').notNull().default(''), // comma separated
   status: varchar('status', { length: 12 }).notNull().default('draft'), // draft | published

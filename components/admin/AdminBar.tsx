@@ -12,7 +12,6 @@ export default function AdminBar() {
     <aside className="adm-bar">
       <Link href="/admin" className="adm-brand" aria-label="Sunivera admin home">
         <Image src={logo} alt="Sunivera" width={166} height={69} priority />
-        <span>Content studio</span>
       </Link>
       <nav aria-label="Admin navigation">
         <Link className={pathname === '/admin' ? 'active' : ''} href="/admin"><span aria-hidden="true">▦</span> Posts</Link>

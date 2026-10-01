@@ -54,6 +54,7 @@ export async function savePostAction(fd: FormData) {
     await savePost({
       id, title, slug,
       excerpt: String(fd.get('excerpt') ?? '').trim(),
+      featuredImage: String(fd.get('featuredImage') ?? '').trim(),
       tags: String(fd.get('tags') ?? '').trim(),
       body: String(fd.get('body') ?? ''),
       status: fd.get('status') === 'published' ? 'published' : 'draft',

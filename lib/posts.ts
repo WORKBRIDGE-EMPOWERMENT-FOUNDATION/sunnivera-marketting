@@ -5,10 +5,10 @@ import { db } from './db'
 import { posts } from './schema'
 
 export type Post = {
-  id: number; slug: string; title: string; excerpt: string; body: string
+  id: number; slug: string; title: string; excerpt: string; featuredImage: string; body: string
   tags: string[]; status: string; date: string; html: string
 }
-export type PostInput = { id: number | null; slug: string; title: string; excerpt: string; tags: string; body: string; status: 'draft' | 'published' }
+export type PostInput = { id: number | null; slug: string; title: string; excerpt: string; featuredImage: string; tags: string; body: string; status: 'draft' | 'published' }
 
 const render = (md: string) =>
   sanitizeHtml(marked.parse(md, { async: false }) as string, {
@@ -19,7 +19,7 @@ const render = (md: string) =>
 
 function toPost(r: typeof posts.$inferSelect, html = false): Post {
   return {
-    id: r.id, slug: r.slug, title: r.title, excerpt: r.excerpt, body: r.body, status: r.status,
+    id: r.id, slug: r.slug, title: r.title, excerpt: r.excerpt, featuredImage: r.featuredImage, body: r.body, status: r.status,
     tags: r.tags.split(',').map(t => t.trim()).filter(Boolean),
     date: (r.publishedAt ?? r.createdAt).toISOString().slice(0, 10),
     html: html ? render(r.body) : '',
@@ -52,7 +52,7 @@ export async function getPostById(id: number): Promise<Post | undefined> {
   return r && toPost(r)
 }
 export async function savePost(i: PostInput) {
-  const fields = { slug: i.slug, title: i.title, excerpt: i.excerpt, tags: i.tags, body: i.body, status: i.status }
+  const fields = { slug: i.slug, title: i.title, excerpt: i.excerpt, featuredImage: i.featuredImage, tags: i.tags, body: i.body, status: i.status }
   if (i.id) {
     await db.update(posts).set({
       ...fields, updatedAt: new Date(),

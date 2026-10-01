@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const p = await getPost(slug)
   if (!p) return {}
-  return { title: p.title, description: p.excerpt, openGraph: { title: p.title, description: p.excerpt, type: 'article', publishedTime: p.date } }
+  return { title: p.title, description: p.excerpt, openGraph: { title: p.title, description: p.excerpt, type: 'article', publishedTime: p.date, images: p.featuredImage ? [p.featuredImage] : undefined } }
 }
 
 export default async function Post({ params }: Props) {
@@ -24,6 +24,7 @@ export default async function Post({ params }: Props) {
         <Link href="/insights" className="back">← All insights</Link>
         <p className="kicker">{fmt(p.date)}</p>
         <h1>{p.title}</h1>
+        {p.featuredImage && <img className="article-banner" src={p.featuredImage} alt="" />}
         <div className="prose" dangerouslySetInnerHTML={{ __html: p.html }} />
         <div className="cta-inline">
           <p>Have a requirement like this?</p>

@@ -18,6 +18,7 @@ export default async function Insights() {
         <div className="plist">
           {posts.map(p => (
             <Link key={p.slug} href={`/insights/${p.slug}`} className="prow">
+              {p.featuredImage && <img className="post-thumb" src={p.featuredImage} alt="" />}
               <time dateTime={p.date}>{fmt(p.date)}</time>
               <div><h2>{p.title}</h2><p>{p.excerpt}</p></div>
               <span aria-hidden>→</span>

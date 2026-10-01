@@ -6,11 +6,17 @@
     "build": "next build",
     "start": "next start",
     "db:push": "drizzle-kit push",
+    "setup:blog-images": "tsx scripts/setup-blog-images.ts",
     "import:posts": "tsx --env-file=.env.local scripts/import-posts.ts",
     "admin:credentials": "node scripts/generate-admin.mjs --write"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
+    "@tiptap/extension-image": "^3.31.4",
+    "@tiptap/extension-link": "^3.31.4",
+    "@tiptap/extension-placeholder": "^3.31.4",
+    "@tiptap/react": "^3.31.4",
+    "@tiptap/starter-kit": "^3.31.4",
     "@vercel/analytics": "^2.0.1",
     "drizzle-orm": "^0.36.0",
     "gray-matter": "^4.0.3",

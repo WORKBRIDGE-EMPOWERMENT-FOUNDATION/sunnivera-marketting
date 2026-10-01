@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { getAllPosts, fmt } from '@/lib/posts'
+import { getAllPosts } from '@/lib/posts'
 import { deletePostAction } from './actions'
-import DeleteButton from '@/components/admin/DeleteButton'
+import PostLibrary from '@/components/admin/PostLibrary'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,18 +22,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
         <div><span>Published</span><strong>{published}</strong></div>
         <div><span>Drafts</span><strong>{drafts}</strong></div>
       </div>
-      <section className="post-panel">
-        <div className="post-panel-head"><div><h2>All posts</h2><p>{posts.length} {posts.length === 1 ? 'article' : 'articles'} in your library</p></div></div>
-        {posts.length === 0 && <div className="empty"><h2>No posts yet</h2><p>Create your first insight and it will appear here.</p><Link className="admin-primary" href="/admin/new">Create post</Link></div>}
-        {posts.map(p => (
-          <article className="arow" key={p.id}>
-            <div className="post-title"><h3>{p.title}</h3><small>/insights/{p.slug}</small></div>
-            <span className={`pill ${p.status === 'published' ? 'pub' : ''}`}><i />{p.status === 'published' ? 'Published' : 'Draft'}</span>
-            <small className="post-date">{fmt(p.date)}</small>
-            <div className="post-actions"><Link className="edit-link" href={`/admin/${p.id}`}>Edit</Link><DeleteButton id={p.id} action={deletePostAction} /></div>
-          </article>
-        ))}
-      </section>
+      <PostLibrary posts={posts} action={deletePostAction} />
     </>
   )
 }
