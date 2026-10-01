@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import { Bricolage_Grotesque, Instrument_Sans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import SiteHeader from '@/components/SiteHeader'
-import SiteFooter from '@/components/SiteFooter'
+import SiteChrome from '@/components/SiteChrome'
 import './globals.css'
 
 const display = Bricolage_Grotesque({ subsets: ['latin'], variable: '--f-d' })
@@ -19,9 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <SiteChrome>{children}</SiteChrome>
         <Analytics />
       </body>
     </html>

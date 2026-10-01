@@ -6,9 +6,9 @@ export const metadata: Metadata = { title: 'Admin', robots: { index: false, foll
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="pg"><div className="wrap">
+    <main className="admin-shell">
       <AdminBar />
-      {children}
-    </div></main>
+      <section className="admin-main">{children}</section>
+    </main>
   )
 }

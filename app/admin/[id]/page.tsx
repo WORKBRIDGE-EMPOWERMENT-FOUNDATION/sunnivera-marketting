@@ -10,5 +10,5 @@ export default async function Edit({ params, searchParams }: Props) {
   const [{ id }, { error }] = await Promise.all([params, searchParams])
   const post = await getPostById(Number(id))
   if (!post) notFound()
-  return (<><h1 style={{ fontSize: '2.4rem', marginBottom: 20 }}>Edit post</h1><PostForm post={post} error={error} /></>)
+  return (<><header className="editor-head"><div><p className="eyebrow">Posts / Edit post</p><h1>Edit post</h1><p>Update the article content and publishing details.</p></div></header><PostForm post={post} error={error} /></>)
 }
