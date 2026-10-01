@@ -1258,7 +1258,7 @@ form .btn:disabled {
   }
 }
 .foot .mark {
-  background: var(--chalk);
-  padding: 10px 16px;
-  width: fit-content;
+  background: transparent;
+  padding: 0;
+  width: auto;
 }

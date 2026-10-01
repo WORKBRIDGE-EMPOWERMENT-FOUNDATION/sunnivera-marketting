@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/app/sunnivera-logo.webp";
+import logo from "@/app/sunnivera-logo.png";
 import MobileMenu from "./MobileMenu";
 
 export default function SiteHeader() {
@@ -8,7 +8,14 @@ export default function SiteHeader() {
     <header className="hd">
       <div className="wrap bar">
         <Link href="/" className="mark">
-          <Image src={logo} alt="Sunivera Logistics Limited" priority />
+          <Image
+            src={logo}
+            alt="Sunivera Logistics Limited"
+            width={212}
+            height={88}
+            quality={100}
+            priority
+          />
         </Link>
         <nav>
           <Link href="/about">About</Link>
