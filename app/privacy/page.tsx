@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = { title: 'Privacy', description: 'How Sunivera Logistics Limited handles information you send through this website.' }
+export const metadata: Metadata = { title: 'Privacy', description: 'How Sunivera Logistics Limited handles information you send through this website.', alternates: { canonical: '/privacy' } }
 
 // Draft. Have it reviewed against the data protection law that applies to you before launch, and fill in the [brackets].
 export default function Privacy() {

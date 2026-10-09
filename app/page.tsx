@@ -1,10 +1,14 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import Ledger, { Item } from "@/components/Ledger";
 import Route from "@/components/Route";
 import Form from "@/components/Form";
 import PhotoStrip from "@/components/PhotoStrip";
 import Faq from "@/components/Faq";
 import Birds from "@/components/Birds";   // with the other imports
+import { absoluteUrl, companyName } from "@/lib/site";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const items: Item[] = [
   {
@@ -81,8 +85,21 @@ const items: Item[] = [
 ];
 
 export default function Home() {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${absoluteUrl('/')}#organization`,
+    name: companyName,
+    url: absoluteUrl('/'),
+    logo: absoluteUrl('/sunnivera-logo.png'),
+    email: 'hello@suniveralogisticsltd.com',
+    description: 'A business execution partner across procurement, compliance, projects, workforce, technology and logistics in Africa.',
+    knowsAbout: items.map((item) => item.name),
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <main id="top">
         <section className="hero">
           <Birds /> 

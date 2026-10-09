@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Board from '@/components/Board'
 
-export const metadata: Metadata = { title: 'Opportunities', description: 'Tenders, RFQs, EOIs, grants and partnerships, with eligibility review, deadline tracking and bid support.' }
+export const metadata: Metadata = { title: 'Opportunities', description: 'Tenders, RFQs, EOIs, grants and partnerships, with eligibility review, deadline tracking and bid support.', alternates: { canonical: '/opportunities' } }
 
 export default function Opportunities() {
   return (

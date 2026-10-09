@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
-export const metadata: Metadata = { title: 'Careers and talent', description: 'A verified talent network for employment, NYSC, internships and client deployments.' }
+export const metadata: Metadata = { title: 'Careers and talent', description: 'A verified talent network for employment, NYSC, internships and client deployments.', alternates: { canonical: '/talent' } }
 
 export default function Talent() {
   return (

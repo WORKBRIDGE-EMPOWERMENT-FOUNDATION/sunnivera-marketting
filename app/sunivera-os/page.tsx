@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import StatusTrail from '@/components/StatusTrail'
 
-export const metadata: Metadata = { title: 'Sunivera OS', description: 'One operating environment for clients, vendors, talent and internal teams. In development.' }
+export const metadata: Metadata = { title: 'Sunivera OS', description: 'One operating environment for clients, vendors, talent and internal teams. In development.', alternates: { canonical: '/sunivera-os' } }
 
 export default function OS() {
   return (

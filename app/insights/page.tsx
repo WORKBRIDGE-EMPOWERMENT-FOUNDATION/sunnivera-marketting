@@ -4,7 +4,7 @@ import { getPosts, fmt } from '@/lib/posts'
 
 export const revalidate = 60
 
-export const metadata: Metadata = { title: 'Insights', description: 'Practical notes on procurement, compliance, projects and workforce from Sunivera.' }
+export const metadata: Metadata = { title: 'Insights', description: 'Practical notes on procurement, compliance, projects and workforce from Sunivera.', alternates: { canonical: '/insights' } }
 
 export default async function Insights() {
   const posts = await getPosts()
@@ -18,7 +18,7 @@ export default async function Insights() {
         <div className="plist">
           {posts.map(p => (
             <Link key={p.slug} href={`/insights/${p.slug}`} className="prow">
-              {p.featuredImage && <img className="post-thumb" src={p.featuredImage} alt="" />}
+              {p.featuredImage && <img className="post-thumb" src={p.featuredImage} alt={`Featured image for ${p.title}`} />}
               <time dateTime={p.date}>{fmt(p.date)}</time>
               <div><h2>{p.title}</h2><p>{p.excerpt}</p></div>
               <span aria-hidden>→</span>

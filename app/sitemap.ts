@@ -1,10 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getPosts } from "@/lib/posts";
+import { absoluteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-
-const base =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://suniveralogisticsltd.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = [
@@ -15,10 +13,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/sunivera-os",
     "/insights",
     "/privacy",
-    
-  ].map((p) => ({ url: base + p, lastModified: new Date() }));
+  ].map((p) => ({ url: absoluteUrl(p || "/") }));
   const posts = (await getPosts()).map((p) => ({
-    url: `${base}/insights/${p.slug}`,
+    url: absoluteUrl(`/insights/${p.slug}`),
     lastModified: new Date(p.date),
   }));
   return [...pages, ...posts];

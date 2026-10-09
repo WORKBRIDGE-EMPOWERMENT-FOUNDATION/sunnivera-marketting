@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Sunivera Logistics Limited is a business execution partner across procurement, compliance, projects, workforce and technology.",
+  alternates: { canonical: "/about" },
 };
 
 // Replace every [bracketed] value with verified details before launch.
