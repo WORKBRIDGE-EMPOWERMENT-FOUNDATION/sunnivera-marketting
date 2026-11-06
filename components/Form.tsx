@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const EMAIL = "hello@suniveralogisticsltd.com";
 
@@ -8,6 +8,12 @@ export default function Form() {
     "idle",
   );
   const [msg, setMsg] = useState("");
+  const [reference, setReference] = useState("");
+  // When the form appeared: the CRM treats messages sent within two seconds as automated.
+  const opened = useRef(0);
+  useEffect(() => {
+    opened.current = Date.now();
+  }, []);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,11 +23,16 @@ export default function Form() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        body: JSON.stringify({
+          ...Object.fromEntries(new FormData(form)),
+          elapsedMs: opened.current ? Date.now() - opened.current : null,
+          page: window.location.pathname,
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Something went wrong.");
       form.reset();
+      setReference(typeof data.reference === "string" ? data.reference : "");
       setState("sent");
     } catch (err) {
       setMsg(err instanceof Error ? err.message : "Something went wrong.");
@@ -33,7 +44,18 @@ export default function Form() {
     return (
       <div className="sent" role="status">
         <h3>Enquiry received.</h3>
-        <p>Thank you. We will reply to the email address you gave.</p>
+        {reference ? (
+          <p>
+            Your reference is <strong>{reference}</strong>. We have emailed you
+            the name of the person leading your request, and we will reply
+            within one business day.
+          </p>
+        ) : (
+          <p>
+            Thank you. We will reply to the email address you gave within one
+            business day.
+          </p>
+        )}
       </div>
     );
 
@@ -52,6 +74,10 @@ export default function Form() {
         <input name="c" autoComplete="organization" />
       </label>
       <label>
+        Phone (optional)
+        <input name="p" type="tel" autoComplete="tel" maxLength={40} />
+      </label>
+      <label>
         What do you need?
         <select name="t">
           {[
@@ -68,7 +94,7 @@ export default function Form() {
       </label>
       <label>
         The enquiry
-        <textarea name="m" rows={3} required />
+        <textarea name="m" rows={3} required minLength={10} />
       </label>
       <input
         className="hp"

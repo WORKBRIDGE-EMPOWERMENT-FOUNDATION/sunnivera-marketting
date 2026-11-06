@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Ledger, { Item } from "@/components/Ledger";
 import Route from "@/components/Route";
 import Form from "@/components/Form";
+import CaseStudies from "@/components/CaseStudies";
 import PhotoStrip from "@/components/PhotoStrip";
 import Faq from "@/components/Faq";
 import Birds from "@/components/Birds";   // with the other imports
@@ -250,7 +251,7 @@ export default function Home() {
                 </p>
               </article>
             </div>
-            {/* <div className="slot">Verified case study goes here</div> */}
+            <CaseStudies />
           </div>
         </section>
 

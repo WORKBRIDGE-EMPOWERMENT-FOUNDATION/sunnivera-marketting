@@ -493,6 +493,53 @@ p {
 .proof p {
   color: var(--mut);
 }
+.cases {
+  display: grid;
+  gap: 28px;
+  margin-top: 56px;
+}
+.case {
+  padding: 34px 36px;
+  background: var(--ink);
+  color: var(--chalk);
+}
+.case-meta {
+  color: var(--sun);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.case h3 {
+  margin: 10px 0 26px;
+  font-size: 1.9rem;
+  color: #fff;
+}
+.case dl {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin: 0;
+}
+.case dt {
+  margin-bottom: 8px;
+  color: var(--sun);
+  font-weight: 700;
+}
+.case dd {
+  margin: 0;
+  color: #d6d3cd;
+  line-height: 1.6;
+}
+@media (max-width: 860px) {
+  .case {
+    padding: 26px 22px;
+  }
+  .case dl {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
 .slot {
   margin-top: 50px;
   border: 2px dashed var(--ink);

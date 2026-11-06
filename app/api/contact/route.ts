@@ -11,6 +11,35 @@ const clean = (v: unknown, max: number) => String(v ?? '').trim().slice(0, max)
 const oneLine = (v: string) => v.replace(/[\r\n]+/g, ' ')
 const fail = (error: string, status: number) => NextResponse.json({ error }, { status })
 
+/**
+ * Hand the enquiry to Sunivera CRM, which opens a client request, assigns the named lead and
+ * emails the client their reference. Server to server, signed with CRM_ENQUIRY_SECRET; the
+ * enquiry is already stored and emailed here, so a CRM outage never loses it.
+ */
+async function forwardToCrm(enquiry: Record<string, unknown>): Promise<string | null> {
+  const secret = process.env.CRM_ENQUIRY_SECRET
+  if (!secret) return null
+  const base = (process.env.CRM_URL || 'https://crm.suniveralogisticsltd.com').replace(/\/$/, '')
+  try {
+    const res = await fetch(`${base}/api/public/enquiries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` },
+      body: JSON.stringify(enquiry),
+      signal: AbortSignal.timeout(6000),
+      cache: 'no-store',
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) {
+      console.error(`CRM did not accept the enquiry (${res.status}).`)
+      return null
+    }
+    return typeof data.reference === 'string' ? data.reference : null
+  } catch {
+    console.error('CRM could not be reached; the enquiry is stored and emailed only.')
+    return null
+  }
+}
+
 export async function POST(req: Request) {
   let b: Record<string, unknown>
   try { b = await req.json() } catch { return fail('Bad request.', 400) }
@@ -27,6 +56,7 @@ export async function POST(req: Request) {
   const company = oneLine(clean(b.c, 160))
   const email = oneLine(clean(b.e, 200))
   const service = oneLine(clean(b.t, 60))
+  const phone = oneLine(clean(b.p, 40))
   const message = clean(b.m, 4000)
   if (!name || !message || !/^\S+@\S+\.\S+$/.test(email)) {
     return fail('Please add your name, a valid email and your requirement.', 400)
@@ -54,12 +84,21 @@ export async function POST(req: Request) {
         to: CONTACT_TO || 'hello@suniveralogisticsltd.com',
         replyTo: email,
         subject: `Enquiry: ${service} from ${name}`,
-        text: `Name: ${name}\nCompany: ${company || '-'}\nEmail: ${email}\nNeed: ${service}\n\n${message}`,
+        text: `Name: ${name}\nCompany: ${company || '-'}\nEmail: ${email}\nPhone: ${phone || '-'}\nNeed: ${service}\n\n${message}`,
       })
     } catch {
       console.error('Contact inquiry was stored, but its email notification failed.')
     }
   }
 
-  return NextResponse.json({ ok: true })
+  const elapsed = Number(b.elapsedMs)
+  const reference = await forwardToCrm({
+    name, email, company, phone, service, message,
+    page: clean(b.page, 300),
+    elapsedMs: Number.isFinite(elapsed) ? elapsed : null,
+    trap: '',
+    ip,
+  })
+
+  return NextResponse.json({ ok: true, reference })
 }

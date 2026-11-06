@@ -26,9 +26,9 @@ export default function SiteFooter() {
           <Link href="/talent">Talent network</Link>
           <Link href="/sunivera-os">Sunivera OS</Link>
           <Link href="/privacy">Privacy</Link>
-          <Link href="https://app.suniveralogisticsltd.com/public/login">
-            Staff Login
-          </Link>
+          <a href="https://crm.suniveralogisticsltd.com" rel="nofollow">
+            Staff login
+          </a>
         </nav>
         <small>© 2026 Sunivera Logistics Limited</small>
       </div>
